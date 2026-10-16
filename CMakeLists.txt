@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.25)
 
 project(gs LANGUAGES C)
 
@@ -11,7 +11,14 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
 
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(SDL_STATIC ON CACHE BOOL "" FORCE)
+set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
+set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(external/SDL EXCLUDE_FROM_ALL SYSTEM)
+
 add_executable(gs src/main.c)
+target_link_libraries(gs PRIVATE SDL3::SDL3-static)
 
 if(MSVC)
     target_compile_options(gs PRIVATE /W4 /WX)
